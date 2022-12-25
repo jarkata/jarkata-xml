@@ -1,0 +1,14 @@
+<request name="REQ">
+    <info name="INFO">
+        <element name="TRX_CODE"/>
+        <element name="VERSION"/>
+        <element name="DATA_TYPE"/>
+        <element name="REQ_SN"/>
+    </info>
+    <body name="BODY">
+        <element name="MERCHANT_ID"/>
+        <element name="START_TIME"/>
+        <element name="END_TIME"/>
+        <element name="ACCOUNT_TYPE"/>
+    </body>
+</request>
