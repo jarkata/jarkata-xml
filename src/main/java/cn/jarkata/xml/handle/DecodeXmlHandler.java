@@ -1,21 +1,15 @@
 package cn.jarkata.xml.handle;
 
-import cn.jarkata.xml.XmlElement;
 import cn.jarkata.xml.data.DataValue;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 
 public class DecodeXmlHandler extends DefaultHandler {
 
-    private DataValue dataValue = new DataValue();
+    private final DataValue dataValue = new DataValue();
 
 
     StringBuilder builder;

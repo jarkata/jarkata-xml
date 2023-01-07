@@ -40,6 +40,7 @@
             <groupId>com.ximpleware</groupId>
             <artifactId>vtd-xml</artifactId>
             <version>2.13.4</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
