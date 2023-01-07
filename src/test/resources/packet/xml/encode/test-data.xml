@@ -1,0 +1,13 @@
+<request name="REQ">
+    <info name="INFO">
+        <element name="TRX_CODE">10002</element>
+        <element name="VERSION">1.0.0</element>
+        <element name="DATA_TYPE">ISO</element>
+        <element name="REQ_SN">SN_FSDFAFSFSFS</element>
+    </info>
+    <body name="BODY">
+        <element name="MERCHANT_ID">MID_234234234</element>
+        <element name="START_TIME">TM_20230101</element>
+        <element name="END_TIME">TM_20230202</element>
+    </body>
+</request>

@@ -4,7 +4,6 @@ import cn.jarkata.commons.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

@@ -16,11 +16,11 @@ public class XmlMessageDataHandler implements MessageHandler {
 
     @Override
     public void start(String qName, XmlElement element) {
-        boolean logAble = true;
+        boolean showLog = true;
         if (element != null) {
-            logAble = element.isShowLog();
+            showLog = element.isShowLog();
         }
-        if (!logAble) {
+        if (!showLog) {
             return;
         }
         builder.append("\n<");
@@ -33,11 +33,11 @@ public class XmlMessageDataHandler implements MessageHandler {
         if (logger.isDebugEnabled()) {
             logger.debug("数据：{}", data);
         }
-        boolean logable = true;
+        boolean showLog = true;
         if (element != null) {
-            logable = element.isShowLog();
+            showLog = element.isShowLog();
         }
-        if (!logable) {
+        if (!showLog) {
             return;
         }
         data = StringUtils.trimToEmpty(data);

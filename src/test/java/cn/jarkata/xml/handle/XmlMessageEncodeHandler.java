@@ -10,6 +10,7 @@ import javax.xml.transform.sax.TransformerHandler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 生成xml报文
@@ -36,7 +37,7 @@ public class XmlMessageEncodeHandler {
                 if (StringUtils.isNotBlank(eleKey)) {
                     data = message.get(eleKey);
                 }
-                if (data != null && data instanceof List) {
+                if (data instanceof List) {
                     @SuppressWarnings("unchecked") List<Map<String, Object>> list = (List<Map<String, Object>>) data;
                     //循环数据集合
                     for (Map<String, Object> childrenMessage : list) {
@@ -63,15 +64,12 @@ public class XmlMessageEncodeHandler {
             //子元素为空，则标识该节点为数据节点，将数据输出
             if (childrenElement.isEmpty()) {
                 String eleKey = StringUtils.defaultIfBlank(element.getProperty(), element.getName());
-                eleKey = StringUtils.trimToEmpty(eleKey);
+                eleKey = StringUtils.trimBlankToEmpty(eleKey);
                 Object data = null;
                 if (StringUtils.isNotBlank(eleKey)) {
                     data = message.get(eleKey);
                 }
-                String value = null;
-                if (data != null) {
-                    value = data.toString();
-                }
+                String value = Objects.toString(data, null);
                 value = StringUtils.defaultIfBlank(value, " ");
                 value = element.getData(value);
                 //该handler用于输出日志
@@ -104,7 +102,7 @@ public class XmlMessageEncodeHandler {
             messageDataHandler.start(element.getName(), element);
             handler.startElement(null, null, element.getName(), null);
             String eleKey = StringUtils.defaultIfBlank(element.getProperty(), element.getName());
-            eleKey = StringUtils.trimToEmpty(eleKey);
+            eleKey = StringUtils.trimBlankToEmpty(eleKey);
             Object data = message.get(eleKey);
             String value = null;
             if (data != null) {
