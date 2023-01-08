@@ -9,13 +9,14 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class XmlFactory {
 
     public static DataValue decode(InputStream stream) throws ParserConfigurationException, SAXException, IOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxParser = factory.newSAXParser();
-        DecodeXmlHandler handler = new DecodeXmlHandler();
+        DecodeXmlHandler handler = new DecodeXmlHandler(new ArrayList<>());
         saxParser.parse(stream, handler);
         return handler.getDataValue();
     }

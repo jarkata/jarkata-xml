@@ -2,17 +2,33 @@ package cn.jarkata.xml.data;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-public class DataValue extends HashMap<String, Object> {
-    
+public class DataValue extends HashMap<String, List<XmlNode>> {
 
-    public List<DataValue> dataList;
-
-    public List<DataValue> getDataList() {
-        return dataList;
+    public String getValue(String key) {
+        XmlNode xmlNode = getNode(key);
+        if (Objects.nonNull(xmlNode)) {
+            return xmlNode.getValue();
+        }
+        return null;
     }
 
-    public void setDataList(List<DataValue> dataList) {
-        this.dataList = dataList;
+    public XmlNode getNode(String key) {
+        List<XmlNode> nodeList = get(key);
+        if (Objects.nonNull(nodeList) && nodeList.size() == 1) {
+            return nodeList.get(0);
+        }
+        return null;
     }
+
+    public List<String> getValues(String key) {
+        return getNodeList(key).stream().map(XmlNode::getValue).collect(Collectors.toList());
+    }
+
+    public List<XmlNode> getNodeList(String key) {
+        return get(key);
+    }
+
 }

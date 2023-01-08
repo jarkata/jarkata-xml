@@ -1,6 +1,7 @@
 package cn.jarkata.xml.handle;
 
 import cn.jarkata.xml.data.DataValue;
+import cn.jarkata.xml.data.XmlNode;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -14,14 +15,31 @@ public class DecodeXmlHandler extends DefaultHandler {
 
     StringBuilder builder;
 
-    private final Deque<String> deque = new ConcurrentLinkedDeque<>();
+    private final Deque<XmlNode> deque = new ConcurrentLinkedDeque<>();
 
     private String startQName;
 
+    private List<String> ignoreElement = new ArrayList<>();
+
+    public DecodeXmlHandler() {
+        dataValue.clear();
+    }
+
+    public DecodeXmlHandler(List<String> ignoreElement) {
+        this();
+        this.ignoreElement = ignoreElement;
+    }
+
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
-//        System.out.println("startElement:::" + uri + ",localName=" + localName + ",qName=" + qName + ",attributes=" + attributes);
-        deque.push(qName);
+        XmlNode node = new XmlNode(qName);
+        int length = attributes.getLength();
+        for (int index = 0; index < length; index++) {
+            String attributesValue = attributes.getValue(index);
+            String attributesQName = attributes.getQName(index);
+            node.setAttr(attributesQName, attributesValue);
+        }
+        deque.push(node);
         startQName = qName;
     }
 
@@ -31,45 +49,29 @@ public class DecodeXmlHandler extends DefaultHandler {
             builder = new StringBuilder();
         }
         builder.append(ch, start, length);
-//        System.out.println("==========start==");
-
-//        System.out.println(new String(ch, start, length).trim());
-//        System.out.println("start=" + start + ",len=" + length);
-//        System.out.println("=========end===");
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) {
-
         try {
-            String qNameKey;
-            Iterator<String> stringIterator = deque.descendingIterator();
-            StringBuilder qNameBuilder = new StringBuilder("/");
-            while (stringIterator.hasNext()) {
-                String next = stringIterator.next();
-                qNameBuilder.append("/").append(next);
+            XmlNode xmlNode = deque.pop();
+            if (ignoreElement.contains(qName)) {
+                return;
             }
-            qNameKey = qNameBuilder.toString();
-            if (qNameKey.endsWith(qName) && startQName.equals(qName)) {
+            if (xmlNode.getName().equals(qName) && startQName.equals(qName)) {
                 String dataVal = builder.toString().trim();
-                Object value = dataValue.get(qNameKey);
-                if (Objects.isNull(value)) {
-                    dataValue.put(qNameKey, dataVal);
+                xmlNode.setValue(dataVal);
+                List<XmlNode> nodeList = dataValue.get(qName);
+                if (Objects.isNull(nodeList)) {
+                    ArrayList<XmlNode> data = new ArrayList<>();
+                    data.add(xmlNode);
+                    dataValue.put(qName, data);
                     return;
                 }
-                if (value instanceof List) {
-                    List<Object> dataList = (List<Object>) value;
-                    dataList.add(dataVal);
-                    dataValue.put(qNameKey, dataList);
-                } else {
-                    List<Object> dataList = new ArrayList<>();
-                    dataList.add(value);
-                    dataList.add(dataVal);
-                    dataValue.put(qNameKey, dataList);
-                }
+                nodeList.add(xmlNode);
+                dataValue.put(qName, nodeList);
             }
         } finally {
-            deque.pop();
             builder = null;
         }
 
