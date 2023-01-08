@@ -3,7 +3,6 @@ package cn.jarkata.xml;
 import cn.jarkata.xml.data.DataValue;
 
 import java.io.InputStream;
-import java.util.Map;
 
 public interface MessageFactory {
 
@@ -21,6 +20,6 @@ public interface MessageFactory {
      * @param message
      * @return XML数据
      */
-    String encode(Map<String, Object> message);
+    String encode(DataValue message) throws Exception;
 
 }

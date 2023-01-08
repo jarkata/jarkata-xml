@@ -14,6 +14,17 @@ import java.util.List;
 public class XmlFactoryTest {
 
     @Test
+    public void testEncode() throws Exception {
+        XmlFactory factory = new XmlFactory();
+        String encode = factory.encode(new DataValue());
+        System.out.println(encode);
+        DataValue dataValue = factory.decode(new ByteArrayInputStream(encode.getBytes(StandardCharsets.UTF_8)));
+        System.out.println(dataValue);
+        String value = dataValue.getValue("root");
+        System.out.println(value);
+    }
+
+    @Test
     public void testDecode() throws Exception {
 
         InputStream stream = FileUtils.getStream("packet/xml/encode/test-data.xml");
