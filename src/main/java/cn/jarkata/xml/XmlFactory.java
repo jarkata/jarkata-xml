@@ -1,7 +1,7 @@
 package cn.jarkata.xml;
 
 import cn.jarkata.xml.data.DataValue;
-import cn.jarkata.xml.handle.DecodeXmlHandler;
+import cn.jarkata.xml.handle.XmlMsgDecodeHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -14,7 +14,7 @@ public class XmlFactory implements MessageFactory {
     public DataValue decode(InputStream stream) throws Exception {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxParser = factory.newSAXParser();
-        DecodeXmlHandler handler = new DecodeXmlHandler(new ArrayList<>());
+        XmlMsgDecodeHandler handler = new XmlMsgDecodeHandler(new ArrayList<>());
         saxParser.parse(stream, handler);
         return handler.getDataValue();
     }

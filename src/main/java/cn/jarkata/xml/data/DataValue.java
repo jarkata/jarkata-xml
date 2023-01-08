@@ -24,11 +24,12 @@ public class DataValue extends HashMap<String, List<XmlNode>> {
     }
 
     public List<String> getValues(String key) {
-        return getNodeList(key).stream().map(XmlNode::getValue).collect(Collectors.toList());
+        return get(key).stream().map(XmlNode::getValue).collect(Collectors.toList());
     }
 
-    public List<XmlNode> getNodeList(String key) {
-        return get(key);
+    @Override
+    public List<XmlNode> get(Object key) {
+        return super.get(key);
     }
 
 }

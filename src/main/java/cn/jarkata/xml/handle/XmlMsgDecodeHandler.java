@@ -8,7 +8,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class DecodeXmlHandler extends DefaultHandler {
+public class XmlMsgDecodeHandler extends DefaultHandler {
 
     private final DataValue dataValue = new DataValue();
 
@@ -20,11 +20,11 @@ public class DecodeXmlHandler extends DefaultHandler {
 
     private List<String> ignoreElement = new ArrayList<>();
 
-    public DecodeXmlHandler() {
+    public XmlMsgDecodeHandler() {
         dataValue.clear();
     }
 
-    public DecodeXmlHandler(List<String> ignoreElement) {
+    public XmlMsgDecodeHandler(List<String> ignoreElement) {
         this();
         this.ignoreElement = ignoreElement;
     }

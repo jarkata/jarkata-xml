@@ -3,8 +3,7 @@ package cn.jarkata.xml.data;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class XmlNode {
-
+public final class XmlNode {
     private String name;
     private String value;
     private final Map<String, String> attr = new LinkedHashMap<>();
