@@ -3,14 +3,10 @@ package cn.jarkata.xml;
 
 import cn.jarkata.commons.utils.FileUtils;
 import cn.jarkata.xml.data.DataValue;
-import cn.jarkata.xml.data.XmlNode;
 import org.junit.Test;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -18,14 +14,15 @@ import java.util.List;
 public class XmlFactoryTest {
 
     @Test
-    public void testDecode() throws ParserConfigurationException, IOException, SAXException {
+    public void testDecode() throws Exception {
 
         InputStream stream = FileUtils.getStream("packet/xml/encode/test-data.xml");
         ByteArrayOutputStream outputStream = FileUtils.toByteStream(stream);
         String message = outputStream.toString(StandardCharsets.UTF_8.name());
         long start = System.currentTimeMillis();
         ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(message.getBytes(StandardCharsets.UTF_8));
-        DataValue dataValue = XmlFactory.decode(arrayInputStream);
+        XmlFactory factory = new XmlFactory();
+        DataValue dataValue = factory.decode(arrayInputStream);
 
         long dur = System.currentTimeMillis() - start;
         System.out.println(dataValue);
@@ -45,9 +42,9 @@ public class XmlFactoryTest {
         String message = outputStream.toString(StandardCharsets.UTF_8.name());
         long start = System.currentTimeMillis();
 
-
+        XmlFactory factory = new XmlFactory();
         ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(message.getBytes(StandardCharsets.UTF_8));
-        DataValue value = XmlFactory.decode(arrayInputStream);
+        DataValue value = factory.decode(arrayInputStream);
         System.out.println(value);
 
         long dur = System.currentTimeMillis() - start;
@@ -57,17 +54,17 @@ public class XmlFactoryTest {
     }
 
     @Test
-    public void testBatchDecode() throws ParserConfigurationException, IOException, SAXException {
+    public void testBatchDecode() throws Exception {
 
         InputStream stream = FileUtils.getStream("packet/xml/encode/test-data.xml");
         ByteArrayOutputStream outputStream = FileUtils.toByteStream(stream);
         String message = outputStream.toString(StandardCharsets.UTF_8.name());
         long start = System.currentTimeMillis();
-
+        XmlFactory factory = new XmlFactory();
 
         for (int index = 0; index < 1000; index++) {
             ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(message.getBytes(StandardCharsets.UTF_8));
-            XmlFactory.decode(arrayInputStream);
+            factory.decode(arrayInputStream);
         }
 
         long dur = System.currentTimeMillis() - start;

@@ -1,5 +1,8 @@
 package cn.jarkata.xml;
 
+import cn.jarkata.xml.data.DataValue;
+
+import java.io.InputStream;
 import java.util.Map;
 
 public interface MessageFactory {
@@ -7,38 +10,17 @@ public interface MessageFactory {
     /**
      * 解码报文
      *
-     * @param message     xml数据
-     * @param templateUrl xml模版
+     * @param message xml数据
      * @return 解析之后的map数据
      */
-    Map<String, Object> decode(String message, String templateUrl);
-
-    /**
-     * 解码报文
-     *
-     * @param message
-     * @param messageType 使用表示decode或encode表示
-     * @param templateUrl
-     * @return
-     */
-    Map<String, Object> decode(String message, String templateUrl, String messageType);
+    DataValue decode(InputStream message) throws Exception;
 
     /**
      * 生成报文
      *
      * @param message
-     * @param templateUrl
-     * @return
+     * @return XML数据
      */
-    String encode(Map<String, Object> message, String templateUrl);
+    String encode(Map<String, Object> message);
 
-    /**
-     * 编码报文
-     *
-     * @param message
-     * @param messageType 使用表示decode或encode表示
-     * @param templateUrl
-     * @return
-     */
-    String encode(Map<String, Object> message, String templateUrl, String messageType);
 }

@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * 解析报文
  */
-public class XmlMessageFactory implements MessageFactory {
+public class XmlMessageFactory {
 
     private final Logger logger = LoggerFactory.getLogger(XmlMessageFactory.class);
     /**
@@ -48,7 +48,6 @@ public class XmlMessageFactory implements MessageFactory {
      * @param templateUrl 请求的地址
      * @return 返回解析后map结构的数据
      */
-    @Override
     public Map<String, Object> decode(String message, String templateUrl) {
         return decodeRequest(message, templateUrl, DECODE_DEFAULT_TEMPLATE_DIRECTORY);
     }
@@ -61,7 +60,6 @@ public class XmlMessageFactory implements MessageFactory {
      * @param templateUrl 模版地址
      * @return 解析之后的数据
      */
-    @Override
     public Map<String, Object> decode(String message, String templateUrl, String messageType) {
         return decodeRequest(message, templateUrl, messageType);
     }
@@ -73,7 +71,6 @@ public class XmlMessageFactory implements MessageFactory {
      * @param templateUrl 模版文件的路径
      * @return 返回生成的xml报文
      */
-    @Override
     public String encode(Map<String, Object> message, String templateUrl) {
         return encode(message, templateUrl, ENCODE_DEFAULT_TEMPLATE_DIRECTORY);
     }
@@ -85,7 +82,6 @@ public class XmlMessageFactory implements MessageFactory {
      * @param templateUrl
      * @return
      */
-    @Override
     public String encode(Map<String, Object> message, String templateUrl, String messageType) {
         if (message == null) {
             logger.error("报文消息为空");

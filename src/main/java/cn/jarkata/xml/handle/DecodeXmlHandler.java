@@ -12,8 +12,7 @@ public class DecodeXmlHandler extends DefaultHandler {
 
     private final DataValue dataValue = new DataValue();
 
-
-    StringBuilder builder;
+    private StringBuilder builder;
 
     private final Deque<XmlNode> deque = new ConcurrentLinkedDeque<>();
 
