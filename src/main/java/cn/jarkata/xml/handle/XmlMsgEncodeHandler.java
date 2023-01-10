@@ -2,6 +2,7 @@ package cn.jarkata.xml.handle;
 
 import cn.jarkata.commons.utils.StringUtils;
 import cn.jarkata.xml.data.XmlNode;
+import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -22,18 +23,27 @@ public class XmlMsgEncodeHandler {
         String value = Objects.toString(data, null);
         value = StringUtils.defaultIfBlank(value, " ");
         char[] dataArr = value.toCharArray();
+        Attributes attributes = makeAttr(xmlNode.getAttr());
+        transformerHandler.startElement(null, null, xmlNode.getName(), attributes);
+        transformerHandler.characters(dataArr, 0, dataArr.length);
+        transformerHandler.endElement(null, null, xmlNode.getName());
+    }
 
+
+    /**
+     * 组织XML节点的属性
+     *
+     * @param nodeAttr 节点属性信息
+     * @return 属性对象
+     */
+    private Attributes makeAttr(Map<String, String> nodeAttr) {
         AttributesImpl attributes = new AttributesImpl();
-        Map<String, String> nodeAttr = xmlNode.getAttr();
         for (Map.Entry<String, String> entry : nodeAttr.entrySet()) {
             String entryKey = entry.getKey();
             String entryValue = entry.getValue();
             attributes.addAttribute("", "", entryKey, "CDATA", entryValue);
         }
-
-        transformerHandler.startElement(null, null, xmlNode.getName(), attributes);
-        transformerHandler.characters(dataArr, 0, dataArr.length);
-        transformerHandler.endElement(null, null, xmlNode.getName());
+        return attributes;
     }
 
 }
