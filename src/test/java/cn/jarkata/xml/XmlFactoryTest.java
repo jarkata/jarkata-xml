@@ -23,15 +23,19 @@ public class XmlFactoryTest {
         XmlNode xmlNode = new XmlNode("root");
         xmlNode.setValue("testValue");
         Map<String, XmlNode> nodeChildren = xmlNode.getChildren();
-        nodeChildren.put("child1", new XmlNode("child1", "23423"));
+        XmlNode child1 = new XmlNode("child1", "23423");
+        Map<String, XmlNode> child1Children = child1.getChildren();
+        child1Children.put("child11", new XmlNode("child11", "data1"));
+        child1Children.put("child12", new XmlNode("child12", "data2"));
+        nodeChildren.put("child1", child1);
         nodeChildren.put("child2", new XmlNode("child2", "23423"));
         message.put(xmlNode);
         String encode = factory.encode(message);
         System.out.println("博文：" + encode);
-//        DataMap dataValue = factory.decode(new ByteArrayInputStream(encode.getBytes(StandardCharsets.UTF_8)));
-//        System.out.println(dataValue);
-//        String value = dataValue.getValue("root");
-//        System.out.println(value);
+        DataMap dataValue = factory.decode(new ByteArrayInputStream(encode.getBytes(StandardCharsets.UTF_8)));
+        System.out.println(dataValue);
+        String value = dataValue.getValue("child11");
+        System.out.println(value);
     }
 
     @Test

@@ -43,7 +43,7 @@ public final class DefaultDataMap extends HashMap<String, List<XmlNode>> impleme
         if (Objects.nonNull(nodeList) && nodeList.size() == 1) {
             return nodeList.get(0);
         }
-        throw new IllegalArgumentException(key + " node size more than 1");
+        return null;
     }
 
     @Override

@@ -26,12 +26,7 @@ public class XmlMsgEncodeHandler {
             return;
         }
         XmlNode rootNode = nodeList.get(0);
-        startElement(rootNode);
-        try {
-            buildMsg(rootNode);
-        } finally {
-            endElement(rootNode);
-        }
+        buildMsg(rootNode);
     }
 
     private void buildMsg(XmlNode xmlNode) throws Exception {
@@ -41,18 +36,27 @@ public class XmlMsgEncodeHandler {
             buildPerElement(xmlNode, nodeValue);
             return;
         }
-        for (Map.Entry<String, XmlNode> nodeEntry : nodeChildren.entrySet()) {
-            XmlNode nodeEntryValue = nodeEntry.getValue();
-            buildMsg(nodeEntryValue);
+
+        try {
+            startElement(xmlNode);
+            for (Map.Entry<String, XmlNode> nodeEntry : nodeChildren.entrySet()) {
+                XmlNode nodeEntryValue = nodeEntry.getValue();
+                buildMsg(nodeEntryValue);
+            }
+        } finally {
+            endElement(xmlNode);
         }
 
     }
 
     private void buildPerElement(XmlNode xmlNode, Object data) throws Exception {
         Objects.requireNonNull(xmlNode, "Xml节点对象为空");
-        startElement(xmlNode);
-        writeData(data);
-        endElement(xmlNode);
+        try {
+            startElement(xmlNode);
+            writeData(data);
+        } finally {
+            endElement(xmlNode);
+        }
     }
 
     private void startElement(XmlNode xmlNode) throws SAXException {
