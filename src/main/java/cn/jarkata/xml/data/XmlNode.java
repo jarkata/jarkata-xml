@@ -6,7 +6,6 @@ import java.util.Map;
 public final class XmlNode {
     private String name;
     private String value;
-
     private String nodeType;
 
     private final Map<String, String> attr = new LinkedHashMap<>();
