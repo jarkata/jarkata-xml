@@ -6,10 +6,18 @@ import java.util.Map;
 public final class XmlNode {
     private String name;
     private String value;
+
+    private String nodeType;
+
     private final Map<String, String> attr = new LinkedHashMap<>();
 
     public XmlNode(String name) {
         this.name = name;
+    }
+
+    public XmlNode(String name, String value) {
+        this.name = name;
+        this.value = value;
     }
 
     public String getName() {
@@ -26,6 +34,14 @@ public final class XmlNode {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getNodeType() {
+        return nodeType;
+    }
+
+    public void setNodeType(String nodeType) {
+        this.nodeType = nodeType;
     }
 
     public void setAttr(String key, String value) {

@@ -36,6 +36,8 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
         for (int index = 0; index < length; index++) {
             String attributesValue = attributes.getValue(index);
             String attributesQName = attributes.getQName(index);
+            String attributesType = attributes.getType(index);
+            node.setNodeType(attributesType);
             node.setAttr(attributesQName, attributesValue);
         }
         deque.push(node);

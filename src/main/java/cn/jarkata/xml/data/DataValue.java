@@ -1,11 +1,20 @@
 package cn.jarkata.xml.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DataValue extends HashMap<String, List<XmlNode>> {
+
+    public void put(XmlNode xmlNode) {
+        List<XmlNode> nodeList = new ArrayList<>();
+        if (Objects.nonNull(xmlNode)) {
+            nodeList.add(xmlNode);
+        }
+        put(xmlNode.getName(), nodeList);
+    }
 
     public String getValue(String key) {
         XmlNode xmlNode = getNode(key);

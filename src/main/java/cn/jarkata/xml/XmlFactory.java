@@ -2,7 +2,9 @@ package cn.jarkata.xml;
 
 import cn.jarkata.commons.utils.StringUtils;
 import cn.jarkata.xml.data.DataValue;
+import cn.jarkata.xml.data.XmlNode;
 import cn.jarkata.xml.handle.XmlMsgDecodeHandler;
+import cn.jarkata.xml.handle.XmlMsgEncodeHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -15,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class XmlFactory implements MessageFactory {
@@ -41,11 +44,13 @@ public class XmlFactory implements MessageFactory {
 
         String data = "测试开发回归发送到发送到发送到<>发啥发定时发送到发送到";
         char[] array = data.toCharArray();
-
-        //
-        transformerHandler.startElement(null, null, "root", null);
-        transformerHandler.characters(array, 0, array.length);
-        transformerHandler.endElement(null, null, "root");
+        XmlMsgEncodeHandler msgEncodeHandler = new XmlMsgEncodeHandler(transformerHandler);
+        for (Map.Entry<String, List<XmlNode>> entry : message.entrySet()) {
+            List<XmlNode> entryValue = entry.getValue();
+            for (XmlNode xmlNode : entryValue) {
+                msgEncodeHandler.buildPerElement(xmlNode, xmlNode.getValue());
+            }
+        }
         //生成xml文件结束
         transformerHandler.endDocument();
         String xml = outputStream.toString(StandardCharsets.UTF_8.name());

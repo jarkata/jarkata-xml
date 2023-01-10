@@ -3,6 +3,7 @@ package cn.jarkata.xml;
 
 import cn.jarkata.commons.utils.FileUtils;
 import cn.jarkata.xml.data.DataValue;
+import cn.jarkata.xml.data.XmlNode;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -16,7 +17,11 @@ public class XmlFactoryTest {
     @Test
     public void testEncode() throws Exception {
         XmlFactory factory = new XmlFactory();
-        String encode = factory.encode(new DataValue());
+        DataValue message = new DataValue();
+        XmlNode xmlNode = new XmlNode("root");
+        xmlNode.setValue("testValue");
+        message.put(xmlNode);
+        String encode = factory.encode(message);
         System.out.println(encode);
         DataValue dataValue = factory.decode(new ByteArrayInputStream(encode.getBytes(StandardCharsets.UTF_8)));
         System.out.println(dataValue);
