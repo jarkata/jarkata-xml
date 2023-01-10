@@ -6,6 +6,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import javax.xml.transform.sax.TransformerHandler;
+import java.util.Map;
 import java.util.Objects;
 
 public class XmlMsgEncodeHandler {
@@ -21,8 +22,15 @@ public class XmlMsgEncodeHandler {
         String value = Objects.toString(data, null);
         value = StringUtils.defaultIfBlank(value, " ");
         char[] dataArr = value.toCharArray();
+
         AttributesImpl attributes = new AttributesImpl();
-        attributes.addAttribute("", "", "test", "CDATA", "fadsfasdf");
+        Map<String, String> nodeAttr = xmlNode.getAttr();
+        for (Map.Entry<String, String> entry : nodeAttr.entrySet()) {
+            String entryKey = entry.getKey();
+            String entryValue = entry.getValue();
+            attributes.addAttribute("", "", entryKey, "CDATA", entryValue);
+        }
+
         transformerHandler.startElement(null, null, xmlNode.getName(), attributes);
         transformerHandler.characters(dataArr, 0, dataArr.length);
         transformerHandler.endElement(null, null, xmlNode.getName());

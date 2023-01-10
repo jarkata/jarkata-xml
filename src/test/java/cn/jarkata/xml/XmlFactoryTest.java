@@ -2,7 +2,8 @@ package cn.jarkata.xml;
 
 
 import cn.jarkata.commons.utils.FileUtils;
-import cn.jarkata.xml.data.DataValue;
+import cn.jarkata.xml.data.DataMap;
+import cn.jarkata.xml.data.DefaultDataMap;
 import cn.jarkata.xml.data.XmlNode;
 import org.junit.Test;
 
@@ -17,13 +18,13 @@ public class XmlFactoryTest {
     @Test
     public void testEncode() throws Exception {
         XmlFactory factory = new XmlFactory();
-        DataValue message = new DataValue();
+        DefaultDataMap message = new DefaultDataMap();
         XmlNode xmlNode = new XmlNode("root");
         xmlNode.setValue("testValue");
         message.put(xmlNode);
         String encode = factory.encode(message);
         System.out.println(encode);
-        DataValue dataValue = factory.decode(new ByteArrayInputStream(encode.getBytes(StandardCharsets.UTF_8)));
+        DataMap dataValue = factory.decode(new ByteArrayInputStream(encode.getBytes(StandardCharsets.UTF_8)));
         System.out.println(dataValue);
         String value = dataValue.getValue("root");
         System.out.println(value);
@@ -38,7 +39,7 @@ public class XmlFactoryTest {
         long start = System.currentTimeMillis();
         ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(message.getBytes(StandardCharsets.UTF_8));
         XmlFactory factory = new XmlFactory();
-        DataValue dataValue = factory.decode(arrayInputStream);
+        DataMap dataValue = factory.decode(arrayInputStream);
 
         long dur = System.currentTimeMillis() - start;
         System.out.println(dataValue);
@@ -60,7 +61,7 @@ public class XmlFactoryTest {
 
         XmlFactory factory = new XmlFactory();
         ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(message.getBytes(StandardCharsets.UTF_8));
-        DataValue value = factory.decode(arrayInputStream);
+        DataMap value = factory.decode(arrayInputStream);
         System.out.println(value);
 
         long dur = System.currentTimeMillis() - start;

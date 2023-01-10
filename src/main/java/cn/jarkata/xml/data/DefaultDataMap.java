@@ -1,13 +1,11 @@
 package cn.jarkata.xml.data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class DataValue extends HashMap<String, List<XmlNode>> {
+public final class DefaultDataMap extends HashMap<String, List<XmlNode>> implements DataMap {
 
+    @Override
     public void put(XmlNode xmlNode) {
         List<XmlNode> nodeList = new ArrayList<>();
         if (Objects.nonNull(xmlNode)) {
@@ -16,6 +14,21 @@ public class DataValue extends HashMap<String, List<XmlNode>> {
         put(xmlNode.getName(), nodeList);
     }
 
+    @Override
+    public List<XmlNode> put(String qName, List<XmlNode> nodeList) {
+        return super.put(qName, nodeList);
+    }
+
+    @Override
+    public List<XmlNode> getNodeList() {
+        List<XmlNode> nodeList = new ArrayList<>();
+        for (List<XmlNode> nodes : super.values()) {
+            nodeList.addAll(nodes);
+        }
+        return nodeList;
+    }
+
+    @Override
     public String getValue(String key) {
         XmlNode xmlNode = getNode(key);
         if (Objects.nonNull(xmlNode)) {
@@ -24,14 +37,16 @@ public class DataValue extends HashMap<String, List<XmlNode>> {
         return null;
     }
 
+    @Override
     public XmlNode getNode(String key) {
         List<XmlNode> nodeList = get(key);
         if (Objects.nonNull(nodeList) && nodeList.size() == 1) {
             return nodeList.get(0);
         }
-        return null;
+        throw new IllegalArgumentException(key + " node size more than 1");
     }
 
+    @Override
     public List<String> getValues(String key) {
         return get(key).stream().map(XmlNode::getValue).collect(Collectors.toList());
     }

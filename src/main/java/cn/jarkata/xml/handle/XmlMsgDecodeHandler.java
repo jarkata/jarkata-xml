@@ -1,6 +1,7 @@
 package cn.jarkata.xml.handle;
 
-import cn.jarkata.xml.data.DataValue;
+import cn.jarkata.xml.data.DataMap;
+import cn.jarkata.xml.data.DefaultDataMap;
 import cn.jarkata.xml.data.XmlNode;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
@@ -10,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class XmlMsgDecodeHandler extends DefaultHandler {
 
-    private final DataValue dataValue = new DataValue();
+    private final DataMap dataValue = new DefaultDataMap();
 
     private StringBuilder builder;
 
@@ -64,9 +65,7 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
                 xmlNode.setValue(dataVal);
                 List<XmlNode> nodeList = dataValue.get(qName);
                 if (Objects.isNull(nodeList)) {
-                    ArrayList<XmlNode> data = new ArrayList<>();
-                    data.add(xmlNode);
-                    dataValue.put(qName, data);
+                    dataValue.put(xmlNode);
                     return;
                 }
                 nodeList.add(xmlNode);
@@ -79,7 +78,7 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
     }
 
 
-    public DataValue getDataValue() {
+    public DataMap getDataValue() {
         return dataValue;
     }
 }

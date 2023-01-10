@@ -1,6 +1,6 @@
 package cn.jarkata.xml;
 
-import cn.jarkata.xml.data.DataValue;
+import cn.jarkata.xml.data.DataMap;
 
 import java.io.InputStream;
 
@@ -12,14 +12,14 @@ public interface MessageFactory {
      * @param message xml数据
      * @return 解析之后的map数据
      */
-    DataValue decode(InputStream message) throws Exception;
+    DataMap decode(InputStream message) throws Exception;
 
     /**
      * 生成报文
      *
-     * @param message
+     * @param message 报文数据
      * @return XML数据
      */
-    String encode(DataValue message) throws Exception;
+    String encode(DataMap message) throws Exception;
 
 }

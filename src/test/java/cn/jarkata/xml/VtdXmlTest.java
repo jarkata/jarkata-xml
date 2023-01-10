@@ -1,7 +1,7 @@
 package cn.jarkata.xml;
 
 import cn.jarkata.commons.utils.FileUtils;
-import cn.jarkata.xml.data.DataValue;
+import cn.jarkata.xml.data.DefaultDataMap;
 import com.ximpleware.*;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class VtdXmlTest {
         InputStream stream = FileUtils.getStream("packet/xml/encode/test-data.xml");
 
         XmlFactory factory = new XmlFactory();
-        String encode = factory.encode(new DataValue());
+        String encode = factory.encode(new DefaultDataMap());
         System.out.println(encode);
         stream = new ByteArrayInputStream(encode.getBytes(StandardCharsets.UTF_8));
 
