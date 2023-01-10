@@ -17,16 +17,14 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
 
     private final Deque<XmlNode> deque = new ConcurrentLinkedDeque<>();
 
-    private String startQName;
-
-    private List<String> ignoreElement = new ArrayList<>();
+    private final List<String> ignoreElement;
 
     public XmlMsgDecodeHandler() {
-        dataValue.clear();
+        this(new ArrayList<>(0));
     }
 
     public XmlMsgDecodeHandler(List<String> ignoreElement) {
-        this();
+        dataValue.clear();
         this.ignoreElement = ignoreElement;
     }
 
@@ -42,7 +40,6 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
             node.setAttr(attributesQName, attributesValue);
         }
         deque.push(node);
-        startQName = qName;
     }
 
     @Override
@@ -60,7 +57,7 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
             if (ignoreElement.contains(qName)) {
                 return;
             }
-            if (xmlNode.getName().equals(qName) && startQName.equals(qName)) {
+            if (xmlNode.getName().equals(qName)) {
                 String dataVal = builder.toString().trim();
                 xmlNode.setValue(dataVal);
                 List<XmlNode> nodeList = dataValue.getOrDefault(qName);
