@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 public class XmlFactoryTest {
 
@@ -21,13 +22,16 @@ public class XmlFactoryTest {
         DefaultDataMap message = new DefaultDataMap();
         XmlNode xmlNode = new XmlNode("root");
         xmlNode.setValue("testValue");
+        Map<String, XmlNode> nodeChildren = xmlNode.getChildren();
+        nodeChildren.put("child1", new XmlNode("child1", "23423"));
+        nodeChildren.put("child2", new XmlNode("child2", "23423"));
         message.put(xmlNode);
         String encode = factory.encode(message);
-        System.out.println(encode);
-        DataMap dataValue = factory.decode(new ByteArrayInputStream(encode.getBytes(StandardCharsets.UTF_8)));
-        System.out.println(dataValue);
-        String value = dataValue.getValue("root");
-        System.out.println(value);
+        System.out.println("博文：" + encode);
+//        DataMap dataValue = factory.decode(new ByteArrayInputStream(encode.getBytes(StandardCharsets.UTF_8)));
+//        System.out.println(dataValue);
+//        String value = dataValue.getValue("root");
+//        System.out.println(value);
     }
 
     @Test

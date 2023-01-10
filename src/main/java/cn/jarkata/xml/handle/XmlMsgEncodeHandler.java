@@ -1,12 +1,14 @@
 package cn.jarkata.xml.handle;
 
 import cn.jarkata.commons.utils.StringUtils;
+import cn.jarkata.xml.data.DataMap;
 import cn.jarkata.xml.data.XmlNode;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import javax.xml.transform.sax.TransformerHandler;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -18,14 +20,55 @@ public class XmlMsgEncodeHandler {
         this.transformerHandler = transformerHandler;
     }
 
-    public void buildPerElement(XmlNode xmlNode, Object data) throws SAXException {
+    public void encodeXmlMsg(DataMap message) throws Exception {
+        List<XmlNode> nodeList = message.getNodeList();
+        if (nodeList.isEmpty()) {
+            return;
+        }
+        XmlNode rootNode = nodeList.get(0);
+        startElement(rootNode);
+        try {
+            buildMsg(rootNode);
+        } finally {
+            endElement(rootNode);
+        }
+    }
+
+    private void buildMsg(XmlNode xmlNode) throws Exception {
+        Map<String, XmlNode> nodeChildren = xmlNode.getChildren();
+        if (nodeChildren.isEmpty()) {
+            String nodeValue = xmlNode.getValue();
+            buildPerElement(xmlNode, nodeValue);
+            return;
+        }
+        for (Map.Entry<String, XmlNode> nodeEntry : nodeChildren.entrySet()) {
+            XmlNode nodeEntryValue = nodeEntry.getValue();
+            buildMsg(nodeEntryValue);
+        }
+
+    }
+
+    private void buildPerElement(XmlNode xmlNode, Object data) throws Exception {
         Objects.requireNonNull(xmlNode, "Xml节点对象为空");
+        startElement(xmlNode);
+        writeData(data);
+        endElement(xmlNode);
+    }
+
+    private void startElement(XmlNode xmlNode) throws SAXException {
+        Attributes attributes = makeAttr(xmlNode.getAttr());
+        transformerHandler.startElement(null, null, xmlNode.getName(), attributes);
+    }
+
+
+    private void writeData(Object data) throws SAXException {
         String value = Objects.toString(data, null);
         value = StringUtils.defaultIfBlank(value, " ");
         char[] dataArr = value.toCharArray();
-        Attributes attributes = makeAttr(xmlNode.getAttr());
-        transformerHandler.startElement(null, null, xmlNode.getName(), attributes);
         transformerHandler.characters(dataArr, 0, dataArr.length);
+    }
+
+    private void endElement(XmlNode xmlNode) throws SAXException {
         transformerHandler.endElement(null, null, xmlNode.getName());
     }
 

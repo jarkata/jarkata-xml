@@ -11,7 +11,7 @@ public final class DefaultDataMap extends HashMap<String, List<XmlNode>> impleme
         if (Objects.nonNull(xmlNode)) {
             nodeList.add(xmlNode);
         }
-        put(xmlNode.getName(), nodeList);
+        super.put(xmlNode.getName(), nodeList);
     }
 
     @Override

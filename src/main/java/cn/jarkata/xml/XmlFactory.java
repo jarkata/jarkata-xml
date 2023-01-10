@@ -2,7 +2,6 @@ package cn.jarkata.xml;
 
 import cn.jarkata.commons.utils.StringUtils;
 import cn.jarkata.xml.data.DataMap;
-import cn.jarkata.xml.data.XmlNode;
 import cn.jarkata.xml.handle.XmlMsgDecodeHandler;
 import cn.jarkata.xml.handle.XmlMsgEncodeHandler;
 
@@ -20,6 +19,7 @@ import java.util.ArrayList;
 
 public class XmlFactory implements MessageFactory {
 
+    @Override
     public DataMap decode(InputStream stream) throws Exception {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser saxParser = factory.newSAXParser();
@@ -35,16 +35,14 @@ public class XmlFactory implements MessageFactory {
         TransformerHandler transformerHandler = factory.newTransformerHandler();
         Transformer transformer = transformerHandler.getTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.ENCODING, StandardCharsets.UTF_8.name());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         StreamResult result = new StreamResult(outputStream);
         transformerHandler.setResult(result);
         transformerHandler.startDocument();
 
         XmlMsgEncodeHandler msgEncodeHandler = new XmlMsgEncodeHandler(transformerHandler);
-
-        for (XmlNode xmlNode : message.getNodeList()) {
-            msgEncodeHandler.buildPerElement(xmlNode, xmlNode.getValue());
-        }
+        msgEncodeHandler.encodeXmlMsg(message);
 
         //生成xml文件结束
         transformerHandler.endDocument();
