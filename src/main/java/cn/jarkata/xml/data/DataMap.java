@@ -20,4 +20,6 @@ public interface DataMap {
 
     List<XmlNode> get(Object key);
 
+    List<XmlNode> getOrDefault(Object key);
+
 }

@@ -56,4 +56,9 @@ public final class DefaultDataMap extends HashMap<String, List<XmlNode>> impleme
         return super.get(key);
     }
 
+    @Override
+    public List<XmlNode> getOrDefault(Object key) {
+        return super.getOrDefault(key, new ArrayList<>());
+    }
+
 }

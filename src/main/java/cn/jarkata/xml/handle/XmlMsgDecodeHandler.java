@@ -63,11 +63,7 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
             if (xmlNode.getName().equals(qName) && startQName.equals(qName)) {
                 String dataVal = builder.toString().trim();
                 xmlNode.setValue(dataVal);
-                List<XmlNode> nodeList = dataValue.get(qName);
-                if (Objects.isNull(nodeList)) {
-                    dataValue.put(xmlNode);
-                    return;
-                }
+                List<XmlNode> nodeList = dataValue.getOrDefault(qName);
                 nodeList.add(xmlNode);
                 dataValue.put(qName, nodeList);
             }
