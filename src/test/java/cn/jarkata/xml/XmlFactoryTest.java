@@ -11,6 +11,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -22,13 +24,13 @@ public class XmlFactoryTest {
         DefaultDataMap message = new DefaultDataMap();
         XmlNode xmlNode = new XmlNode("root");
         xmlNode.setValue("testValue");
-        Map<String, XmlNode> nodeChildren = xmlNode.getChildren();
+        Map<String, List<XmlNode>> nodeChildren = xmlNode.getChildren();
         XmlNode child1 = new XmlNode("child1", "23423");
-        Map<String, XmlNode> child1Children = child1.getChildren();
-        child1Children.put("child11", new XmlNode("child11", "data1"));
-        child1Children.put("child12", new XmlNode("child12", "data2"));
-        nodeChildren.put("child1", child1);
-        nodeChildren.put("child2", new XmlNode("child2", "23423"));
+        Map<String, List<XmlNode>> child1Children = child1.getChildren();
+        child1Children.put("child11", Arrays.asList(new XmlNode("child11", "data1"), new XmlNode("child13", "data13")));
+        child1Children.put("child12", Arrays.asList(new XmlNode("child12", "data2"), new XmlNode("child14", "data24")));
+        nodeChildren.put("child1", Collections.singletonList(child1));
+        nodeChildren.put("child2", Collections.singletonList(new XmlNode("child2", "23423")));
         message.put(xmlNode);
         String encode = factory.encode(message);
         System.out.println("博文：" + encode);

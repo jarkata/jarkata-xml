@@ -1,13 +1,14 @@
 package cn.jarkata.xml.data;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class XmlNode {
     private String name;
     private String value;
     private String nodeType;
-    private final Map<String, XmlNode> children = new LinkedHashMap<>();
+    private final Map<String, List<XmlNode>> children = new LinkedHashMap<>();
 
     private final Map<String, String> attr = new LinkedHashMap<>();
 
@@ -52,7 +53,7 @@ public final class XmlNode {
         return attr;
     }
 
-    public Map<String, XmlNode> getChildren() {
+    public Map<String, List<XmlNode>> getChildren() {
         return children;
     }
 

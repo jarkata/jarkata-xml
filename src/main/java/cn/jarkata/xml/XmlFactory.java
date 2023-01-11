@@ -19,6 +19,13 @@ import java.util.ArrayList;
 
 public class XmlFactory implements MessageFactory {
 
+    /**
+     * 解析XML数据
+     *
+     * @param stream xml数据
+     * @return 数据
+     * @throws Exception 解析数据发生异常
+     */
     @Override
     public DataMap decode(InputStream stream) throws Exception {
         SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -28,6 +35,13 @@ public class XmlFactory implements MessageFactory {
         return handler.getDataValue();
     }
 
+    /**
+     * 生成XML数据
+     *
+     * @param message 报文数据
+     * @return XML豹纹
+     * @throws Exception 异常
+     */
     @Override
     public String encode(DataMap message) throws Exception {
 
@@ -39,11 +53,10 @@ public class XmlFactory implements MessageFactory {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         StreamResult result = new StreamResult(outputStream);
         transformerHandler.setResult(result);
+        //文档开头
         transformerHandler.startDocument();
-
         XmlMsgEncodeHandler msgEncodeHandler = new XmlMsgEncodeHandler(transformerHandler);
         msgEncodeHandler.encodeXmlMsg(message);
-
         //生成xml文件结束
         transformerHandler.endDocument();
         String xml = outputStream.toString(StandardCharsets.UTF_8.name());

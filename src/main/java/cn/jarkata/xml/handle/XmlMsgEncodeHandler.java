@@ -30,7 +30,7 @@ public class XmlMsgEncodeHandler {
     }
 
     private void buildMsg(XmlNode xmlNode) throws Exception {
-        Map<String, XmlNode> nodeChildren = xmlNode.getChildren();
+        Map<String, List<XmlNode>> nodeChildren = xmlNode.getChildren();
         if (nodeChildren.isEmpty()) {
             String nodeValue = xmlNode.getValue();
             buildPerElement(xmlNode, nodeValue);
@@ -39,9 +39,11 @@ public class XmlMsgEncodeHandler {
 
         try {
             startElement(xmlNode);
-            for (Map.Entry<String, XmlNode> nodeEntry : nodeChildren.entrySet()) {
-                XmlNode nodeEntryValue = nodeEntry.getValue();
-                buildMsg(nodeEntryValue);
+            for (Map.Entry<String, List<XmlNode>> nodeEntry : nodeChildren.entrySet()) {
+                List<XmlNode> nodeEntryValue = nodeEntry.getValue();
+                for (XmlNode node : nodeEntryValue) {
+                    buildMsg(node);
+                }
             }
         } finally {
             endElement(xmlNode);

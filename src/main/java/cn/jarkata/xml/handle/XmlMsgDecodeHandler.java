@@ -15,13 +15,11 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
 
     private StringBuilder builder;
 
+    private XmlNode currentStartNode;
+
     private final Deque<XmlNode> deque = new ConcurrentLinkedDeque<>();
 
     private final List<String> ignoreElement;
-
-    public XmlMsgDecodeHandler() {
-        this(new ArrayList<>(0));
-    }
 
     public XmlMsgDecodeHandler(List<String> ignoreElement) {
         dataValue.clear();
@@ -30,16 +28,17 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
-        XmlNode node = new XmlNode(qName);
+        XmlNode currentNode = new XmlNode(qName);
         int length = attributes.getLength();
         for (int index = 0; index < length; index++) {
             String attributesValue = attributes.getValue(index);
             String attributesQName = attributes.getQName(index);
             String attributesType = attributes.getType(index);
-            node.setNodeType(attributesType);
-            node.setAttr(attributesQName, attributesValue);
+            currentNode.setNodeType(attributesType);
+            currentNode.setAttr(attributesQName, attributesValue);
         }
-        deque.push(node);
+        currentStartNode = currentNode;
+        deque.push(currentNode);
     }
 
     @Override
@@ -53,16 +52,25 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) {
         try {
-            XmlNode xmlNode = deque.pop();
+
+            XmlNode prevNode = deque.pop();
             if (ignoreElement.contains(qName)) {
                 return;
             }
-            if (xmlNode.getName().equals(qName)) {
+            if (prevNode.getName().equals(qName)) {
                 String dataVal = builder.toString().trim();
-                xmlNode.setValue(dataVal);
+                prevNode.setValue(dataVal);
                 List<XmlNode> nodeList = dataValue.getOrDefault(qName);
-                nodeList.add(xmlNode);
+                if (Objects.isNull(currentStartNode)) {
+                    List<XmlNode> valueNodeList = dataValue.getNodeList();
+                    Map<String, List<XmlNode>> nodeChildren = prevNode.getChildren();
+                    nodeChildren.put(qName, valueNodeList);
+                    dataValue.clear();
+                }
+                nodeList.add(prevNode);
                 dataValue.put(qName, nodeList);
+
+                currentStartNode = null;
             }
         } finally {
             builder = null;
