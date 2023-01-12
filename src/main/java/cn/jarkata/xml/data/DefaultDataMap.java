@@ -22,19 +22,37 @@ public final class DefaultDataMap extends HashMap<String, List<XmlNode>> impleme
     @Override
     public List<XmlNode> getNodeList() {
         List<XmlNode> nodeList = new ArrayList<>();
-        for (List<XmlNode> nodes : super.values()) {
+        Collection<List<XmlNode>> lists = super.values();
+        for (List<XmlNode> nodes : lists) {
             nodeList.addAll(nodes);
         }
         return nodeList;
     }
 
+    /**
+     * @param key 按照XPath的风格赋值key
+     * @return 节点的值
+     */
     @Override
     public String getValue(String key) {
-        XmlNode xmlNode = getNode(key);
+        XmlNode xmlNode = getNodeByXpath(key);
         if (Objects.nonNull(xmlNode)) {
             return xmlNode.getValue();
         }
         return null;
+    }
+
+    private XmlNode getNodeByXpath(String key) {
+        String[] split = key.split("/");
+        XmlNode node = getNode(split[1]);
+        for (int index = 2; index < split.length; index++) {
+            String subKey = split[index];
+            List<XmlNode> nodeList = Objects.requireNonNull(node).getChildren().get(subKey);
+            for (XmlNode xmlNode : nodeList) {
+                node = xmlNode;
+            }
+        }
+        return node;
     }
 
     @Override

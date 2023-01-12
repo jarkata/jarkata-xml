@@ -36,7 +36,7 @@ public class XmlFactoryTest {
         System.out.println("博文：" + encode);
         DataMap dataValue = factory.decode(new ByteArrayInputStream(encode.getBytes(StandardCharsets.UTF_8)));
         System.out.println(dataValue);
-        String value = dataValue.getValue("child11");
+        String value = dataValue.getValue("/root/child1/child11");
         System.out.println(value);
     }
 

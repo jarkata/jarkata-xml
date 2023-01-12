@@ -64,11 +64,15 @@ public class XmlMsgDecodeHandler extends DefaultHandler {
                 if (Objects.isNull(currentStartNode)) {
                     List<XmlNode> valueNodeList = dataValue.getNodeList();
                     Map<String, List<XmlNode>> nodeChildren = prevNode.getChildren();
-                    nodeChildren.put(qName, valueNodeList);
+                    for (XmlNode xmlNode : valueNodeList) {
+                        nodeChildren.put(xmlNode.getName(), Collections.singletonList(xmlNode));
+                    }
                     dataValue.clear();
+                    dataValue.put(prevNode);
+                } else {
+                    nodeList.add(prevNode);
+                    dataValue.put(qName, nodeList);
                 }
-                nodeList.add(prevNode);
-                dataValue.put(qName, nodeList);
 
                 currentStartNode = null;
             }
